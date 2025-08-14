@@ -14,8 +14,8 @@
    <right>
       <AnchorPane prefHeight="400.0" prefWidth="433.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="btnLogin" layoutX="16.0" layoutY="343.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="337.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15px;" text="Iniciar sesión" textFill="WHITE" />
-            <Button fx:id="btnRegister" layoutX="16.0" layoutY="382.0" mnemonicParsing="false" onAction="#switchToRegisterScene" prefHeight="25.0" prefWidth="337.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15px;" text="Registrarse" textFill="WHITE" />
+            <Button fx:id="btnLogin" layoutX="13.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="25.0" prefWidth="337.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15px;" text="Iniciar sesión" textFill="WHITE" />
+            <Button fx:id="btnRegister" layoutX="13.0" layoutY="360.0" mnemonicParsing="false" onAction="#switchToRegisterScene" prefHeight="25.0" prefWidth="337.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15px;" text="Registrarse" textFill="WHITE" />
             <Text layoutX="99.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenido">
                <font>
                   <Font name="Leelawadee UI" size="35.0" />
@@ -40,11 +40,15 @@
             </Label>
             <TextField fx:id="txtRole" layoutX="149.0" layoutY="252.0" prefHeight="25.0" prefWidth="182.0" />
             <PasswordField fx:id="txtPassword" layoutX="149.0" layoutY="201.0" prefHeight="25.0" prefWidth="182.0" />
+            <Button fx:id="btn_password" layoutX="121.0" layoutY="411.0" mnemonicParsing="false" onAction="#switchToRecoverPasswordScene" prefHeight="17.0" prefWidth="119.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15px;" text="Olvidé mi contraseña" textFill="WHITE">
+               <font>
+                  <Font size="10.0" />
+               </font></Button>
          </children>
       </AnchorPane>
    </right>
    <left>
-      <AnchorPane fx:id="anchorLeft" prefHeight="450.0" prefWidth="288.0" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="anchorLeft" prefHeight="450.0" prefWidth="288.0" style="-fx-background-color: linear-gradient(to bottom, #0b1447, #1b2c8d);" BorderPane.alignment="CENTER">
          <children>
             <Circle fill="#0e1958" layoutX="14.0" layoutY="40.0" radius="100.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Circle fill="#0e1958" layoutX="190.0" layoutY="56.0" radius="42.0" stroke="TRANSPARENT" strokeType="INSIDE" />
@@ -57,7 +61,6 @@
                </font>
             </Text>
             <Circle fill="#0e1958" layoutX="137.0" layoutY="14.0" radius="13.0" stroke="TRANSPARENT" strokeType="INSIDE" />
-            <Button fx:id="btn_password" layoutX="49.0" layoutY="402.0" mnemonicParsing="false" onAction="#switchToRecoverPasswordScene" prefHeight="25.0" prefWidth="190.0" style="-fx-background-color: #1b2c8d; -fx-background-radius: 15px;" text="Olvidé mi contraseña" textFill="WHITE" />
          </children></AnchorPane>
    </left>
 </BorderPane>
