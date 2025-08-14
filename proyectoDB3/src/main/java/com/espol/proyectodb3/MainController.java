@@ -50,7 +50,8 @@ public class MainController {
        stage.centerOnScreen();
    }
 
-   @FXML
+   @SuppressWarnings("unused")
+@FXML
     protected void handleLogin(ActionEvent event){
         String usuario = txtUsername.getText();
         String contrasenia = txtPassword.getText();
@@ -130,6 +131,7 @@ public class MainController {
         }
    }
 
+    @SuppressWarnings("unused")
     private PauseTransition getPauseTransition(ActionEvent event) {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(e ->{

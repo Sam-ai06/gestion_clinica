@@ -12,8 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class ClientController {
@@ -33,6 +31,7 @@ public class ClientController {
         lblWelcome.setText("Bienvenido/a, " + usuario + ".");
     }
 
+    @SuppressWarnings("unused")
     public void handleLogOut(javafx.event.ActionEvent event) {
         try {
             lblWelcome.setText("Cerrando sesión...");

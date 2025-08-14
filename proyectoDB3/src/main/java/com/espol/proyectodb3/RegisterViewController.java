@@ -69,6 +69,7 @@ public class RegisterViewController {
         stage.centerOnScreen();
     }
 
+    @SuppressWarnings("unused")
     @FXML
     public void handleRegister(ActionEvent event) {
         try {
