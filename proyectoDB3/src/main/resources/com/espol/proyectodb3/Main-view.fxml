@@ -44,7 +44,7 @@
       </AnchorPane>
    </right>
    <left>
-      <AnchorPane prefHeight="450.0" prefWidth="288.0" style="-fx-background-color: #0b1447;" BorderPane.alignment="CENTER">
+      <AnchorPane fx:id="anchorLeft" prefHeight="450.0" prefWidth="288.0" BorderPane.alignment="CENTER">
          <children>
             <Circle fill="#0e1958" layoutX="14.0" layoutY="40.0" radius="100.0" stroke="TRANSPARENT" strokeType="INSIDE" />
             <Circle fill="#0e1958" layoutX="190.0" layoutY="56.0" radius="42.0" stroke="TRANSPARENT" strokeType="INSIDE" />

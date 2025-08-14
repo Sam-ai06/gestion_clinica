@@ -17,16 +17,16 @@
                         <Font name="System Bold" size="24.0" />
                     </font>
                 </Label>
-                <Button fx:id="btnLogout" layoutX="800.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #e7e7e7;" text="Cerrar sesión" />
+                <Button fx:id="btnLogout" layoutX="800.0" layoutY="20.0" mnemonicParsing="false" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Cerrar sesión" />
             </children>
         </AnchorPane>
     </top>
     <left>
         <AnchorPane prefWidth="200.0" style="-fx-background-color: #0e1958;">
             <children>
-                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #e7e7e7;" text="Citas" />
-                <Button fx:id="btnPatients" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #e7e7e7;" text="Pacientes" />
-                <Button fx:id="btnPrescriptions" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #e7e7e7;" text="Recetas" />
+                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Citas" />
+                <Button fx:id="btnPatients" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Pacientes" />
+                <Button fx:id="btnPrescriptions" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Recetas" />
             </children>
         </AnchorPane>
     </left>
