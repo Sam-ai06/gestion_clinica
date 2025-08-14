@@ -1,8 +1,5 @@
 package seguridad_Otros;
 
-import javafx.animation.FadeTransition;
-import javafx.scene.Parent;
-import javafx.util.Duration;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class Utileria {

@@ -3,7 +3,7 @@ module com.espol.proyectodb3 {
     requires javafx.fxml;
     requires java.xml;
     requires java.sql;
-    requires jbcrypt;
+    requires jbcrypt; //NO TOCAR el programa puede explotar D:
     requires java.desktop;
 
 
