@@ -1,7 +1,6 @@
 package com.espol.proyectodb3;
 
 import SQL.DatabaseConnection;
-import entidades.Admin;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.sql.*;
 
@@ -30,7 +27,6 @@ public class AdminController {
     private Label lbl_messageAdminPanel;
 
 
-    private Admin admin;
     // Métodos de inicialización y manejo de eventos
     public void switchToRegisterScene(javafx.event.ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("RegistrarStaff-view.fxml"));
@@ -51,6 +47,7 @@ public class AdminController {
         try{
             DatabaseConnection.getConnection();
             Statement stmt = DatabaseConnection.getConnection().createStatement();
+            @SuppressWarnings("unused")
             PreparedStatement pstmt = stmt.getConnection().prepareStatement(sql);
 
 
@@ -63,6 +60,7 @@ public class AdminController {
     }
 
 
+    @SuppressWarnings("unused")
     public void handleLogOut(javafx.event.ActionEvent event) {
         try {
             lbl_messageAdminPanel.setText("Cerrando sesión...");
