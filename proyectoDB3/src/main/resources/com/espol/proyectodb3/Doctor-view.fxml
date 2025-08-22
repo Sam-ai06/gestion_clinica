@@ -37,9 +37,9 @@
                     <columns>
                         <TableColumn fx:id="colDate" prefWidth="120.0" text="Fecha" />
                         <TableColumn fx:id="colPatient" prefWidth="150.0" text="Paciente" />
-                        <TableColumn fx:id="colReason" prefWidth="200.0" text="Motivo" />
-                        <TableColumn fx:id="colStatus" prefWidth="100.0" text="Estado" />
-                        <TableColumn fx:id="colActions" prefWidth="80.0" text="Acciones" />
+                        <TableColumn fx:id="colReason" prefWidth="167.0" text="Motivo" />
+                        <TableColumn fx:id="colStatus" prefWidth="115.0" text="Estado" />
+                        <TableColumn fx:id="colActions" prefWidth="98.0" text="Acciones" />
                     </columns>
                 </TableView>
             </children>
