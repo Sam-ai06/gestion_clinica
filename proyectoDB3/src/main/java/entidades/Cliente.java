@@ -16,5 +16,6 @@ public class Cliente extends Persona{
 
     public void setAgendaCita(boolean agendaCita) {
         this.agendaCita = agendaCita;
+        //comentario de prueba
     }
 }
