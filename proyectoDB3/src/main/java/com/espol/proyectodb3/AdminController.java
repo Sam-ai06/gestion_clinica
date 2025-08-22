@@ -38,6 +38,7 @@ public class AdminController {
         stage.centerOnScreen();
         stage.show();
     }
+
     //metodo para guardar usuarios nuevos
     public boolean registerUser(String cedula, String nombre, String apellido, String edad, String correo, String telefono, String direccion,
                                 String usuario, String contrasena, String rol) {
