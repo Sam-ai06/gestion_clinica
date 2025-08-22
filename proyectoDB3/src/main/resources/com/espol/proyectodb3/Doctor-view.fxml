@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.proyectodb3.DoctorController">
     <top>
         <AnchorPane prefHeight="80.0" prefWidth="900.0" style="-fx-background-color: #0b1447;">
             <children>
@@ -24,16 +24,16 @@
     <left>
         <AnchorPane prefWidth="200.0" style="-fx-background-color: #0e1958;">
             <children>
-                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Citas" />
-                <Button fx:id="btnPatients" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Pacientes" />
-                <Button fx:id="btnPrescriptions" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Recetas" />
+                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleCitas" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Citas" />
+                <Button fx:id="btnPatients" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" onAction="#handlePacientes" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Pacientes" />
+                <Button fx:id="btnPrescriptions" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleRecetas" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Recetas" />
             </children>
         </AnchorPane>
     </left>
     <center>
         <AnchorPane>
             <children>
-                <TableView fx:id="tableAppointments" layoutX="20.0" layoutY="20.0" prefHeight="500.0" prefWidth="650.0">
+                <TableView fx:id="tableAppointments" layoutX="20.0" layoutY="36.0" prefHeight="473.0" prefWidth="650.0">
                     <columns>
                         <TableColumn fx:id="colDate" prefWidth="120.0" text="Fecha" />
                         <TableColumn fx:id="colPatient" prefWidth="150.0" text="Paciente" />
@@ -42,6 +42,7 @@
                         <TableColumn fx:id="colActions" prefWidth="98.0" text="Acciones" />
                     </columns>
                 </TableView>
+            <Label fx:id="lbl_msg" alignment="CENTER" layoutX="146.0" layoutY="10.0" prefHeight="17.0" prefWidth="479.0" textFill="RED" />
             </children>
         </AnchorPane>
     </center>
