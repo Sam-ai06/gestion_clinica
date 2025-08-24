@@ -98,7 +98,7 @@ public class DoctorController implements Initializable {
     public void handlePacientes() {
         // Cambia la vista a la tabla de pacientes
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Pacientes-view.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("Client-view.fxml"));
             Stage stage = (Stage) btnPatients.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -111,9 +111,12 @@ public class DoctorController implements Initializable {
 
     @FXML
     public void handleRecetas() {
-        // Cambia la vista a la tabla de recetas enviadas
+        // Cambia la vista a la tabla de recetas enviadas SOLO por este doctor
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("Recetas-view.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Recetas-view.fxml"));
+            Parent root = loader.load();
+            RecetasController recetasController = loader.getController();
+            recetasController.setCedulaDoctor(cedulaDoctor); // <-- Pasa la cédula del doctor
             Stage stage = (Stage) btnPrescriptions.getScene().getWindow();
             stage.setScene(new Scene(root));
             stage.show();
@@ -153,4 +156,3 @@ public class DoctorController implements Initializable {
     public void initializeLabel(String text) {
     }
 }
-
