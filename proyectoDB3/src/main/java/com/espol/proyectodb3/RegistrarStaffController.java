@@ -85,7 +85,6 @@ public class RegistrarStaffController {
                 return;
             }
             UserValidations.guardarRegistro(cedula, nombrePersona, apellidoPersona, edad, correo, telefono, direccion, usuario, contrasena, rol);
-
             lbl_msg.setStyle("-fx-text-fill: green;");
             lbl_msg.setText("Usuario registrado exitosamente.");
             Stage stage = (Stage) btnRegister.getScene().getWindow();

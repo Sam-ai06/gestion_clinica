@@ -57,8 +57,12 @@ public class EliminarUsuarioController {
             lbl_msg.setText("Error, rellene todos los campos.");
         } else {
             String usuario = txt_usuarioAeliminar.getText();
-            UserValidations.
-
+            UserValidations validator = new UserValidations();
+            validator.eliminarUsuario(usuario, lbl_msg);
+            Stage stage = (Stage) btn_eliminarUsuario.getScene().getWindow();
+            PauseTransition delay = new PauseTransition(Duration.seconds(1));
+            delay.setOnFinished(event -> stage.close());
+            delay.play();
         }
     }
 }
