@@ -1,19 +1,26 @@
 package entidades;
 
-public class Doctor extends Persona{
+public class Doctor extends Persona {
+    private String telefono;
+    private String direccion1;
+    private String usuario;
+    private String contrasena;
+    private String rol;
     private String especialidad;
 
-
-    //mega constructor de la clase:
-
-    public Doctor(String cedula, String nombre, String apellido, int edad, String correo,
-                  String telefono, String direccion1, String direccion2, String usuario,
+    public Doctor(String cedula, String nombre, String apellido, String edad, String correo,
+                  String telefono, String direccion1, String usuario,
                   String contrasena, String rol, String especialidad) {
-        super(cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contrasena, rol);
+        super(cedula, nombre, apellido, edad, correo);
+        this.telefono = telefono;
+        this.direccion1 = direccion1;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.rol = rol;
         this.especialidad = especialidad;
     }
 
-    //getters y setters
+    // Getters y setters
     public String getEspecialidad() {
         return especialidad;
     }
@@ -21,4 +28,5 @@ public class Doctor extends Persona{
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
+
 }
