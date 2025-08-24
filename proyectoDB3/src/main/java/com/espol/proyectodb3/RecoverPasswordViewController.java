@@ -1,5 +1,7 @@
 package com.espol.proyectodb3;
 
+import SQL.DatabaseConnection;
+import SQL.UserValidations;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -10,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.Connection;
 
 public class RecoverPasswordViewController {
     @FXML
@@ -42,8 +45,20 @@ public class RecoverPasswordViewController {
         try{
             if (txt_user.getText() == "" || txt_password.getText() == ""){
                 lbl_msg.setText("Error. Debe rellenar todos los campos");
+                return;
+            }
+            String user = txt_user.getText();
+            String newPassword = txt_password.getText();
+            //verificar el el usuario existe en la base de datos
+            UserValidations validator = new UserValidations();
+            if (validator.validateUser(user)){
+                validator.changePassword(user, newPassword, lbl_msg);
             }
 
+
+        } catch (Exception e) {
+            System.out.println("error en la clase de recuperación de contraseña");
+            throw new RuntimeException(e);
         }
 
     }

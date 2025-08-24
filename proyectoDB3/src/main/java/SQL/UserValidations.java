@@ -1,5 +1,6 @@
 package SQL;
 
+import javafx.scene.control.Label;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
@@ -160,5 +161,48 @@ public class UserValidations {
         }
     }
 
-    //update, delete, insert(solo admins) aquí
+    //validar usuario
+    public boolean validateUser(String user){
+        String sql = "SELECT * FROM personas WHERE usuario = ?";
+       try{
+              Connection connection = DatabaseConnection.getConnection();
+              PreparedStatement statement = connection.prepareStatement(sql);
+              statement.setString(1, user);
+              ResultSet resultSet = statement.executeQuery();
+              if (resultSet.next()){
+                return true;
+              } else {
+                return false;
+              }
+         } catch (SQLException e){
+              e.printStackTrace();
+              return false;
+       }
+
+    }
+
+    public void changePassword(String user, String newPassword, Label label) {
+        String sql = "UPDATE personas SET contraseña = ? WHERE usuario = ?";
+
+        String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            statement.setString(1, hashedPassword);
+            statement.setString(2, user);
+
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                label.setStyle("-fx-text-fill: green;");
+                label.setText("Contraseña actualizada exitosamente.");
+            } else {
+                label.setText("Error al actualizar la contraseña.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("error en la clase userValidations");
+            e.printStackTrace();
+        }
+    }
 }
