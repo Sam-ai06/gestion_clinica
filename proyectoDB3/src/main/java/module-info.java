@@ -10,5 +10,6 @@ module com.espol.proyectodb3 {
 
 
     opens com.espol.proyectodb3 to javafx.fxml;
+    opens entidades to javafx.base, javafx.fxml;
     exports com.espol.proyectodb3;
 }

@@ -1,98 +1,210 @@
 package com.espol.proyectodb3;
 
-import SQL.DatabaseConnection;
-import javafx.event.ActionEvent;
+import entidades.Cita;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Alert;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.ResourceBundle;
 
-public class NuevaCitaController {
-    @FXML
-    private DatePicker datePicker;
-    @FXML
-    private ComboBox<String> cbSpecialty;
-    @FXML
-    private ComboBox<String> cbDoctor;
-    @FXML
-    private TextArea taDescription;
-
+public class NuevaCitaController implements Initializable {
 
     @FXML
-    public void initialize() {
-        // Ejemplo de llenado de ComboBox de especialidades.
-        // Se debe obtener de la base de datos o de un listado predefinido.
-        cbSpecialty.getItems().addAll("Cardiología", "Dermatología", "Pediatría");
+    private ComboBox<Cita.DoctorInfo> cbDoctor;
+    @FXML
+    private DatePicker dpFecha;
+    @FXML
+    private ComboBox<String> cbHora;
+    @FXML
+    private TextArea taDescripcion;
+    @FXML
+    private Button btnAgendar, btnCancelar;
+    @FXML
+    private Label lblTitulo;
+
+    private String cedulaCliente;
+    private String usuarioCliente;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        configurarComponentes();
+        cargarDoctores();
+        configurarEventos();
     }
 
+    private void configurarComponentes() {
+        cbHora.setItems(FXCollections.observableArrayList(
+                "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+                "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
+                "16:00", "16:30", "17:00", "17:30"
+        ));
+
+        dpFecha.setValue(LocalDate.now().plusDays(1));
+        dpFecha.setDayCellFactory(picker -> new DateCell() {
+            public void updateItem(LocalDate date, boolean empty) {
+                super.updateItem(date, empty);
+                setDisable(empty || date.isBefore(LocalDate.now()));
+            }
+        });
+
+        cbDoctor.setCellFactory(listView -> new ListCell<Cita.DoctorInfo>() {
+            @Override
+            protected void updateItem(Cita.DoctorInfo item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNombreCompleto());
+                }
+            }
+        });
+
+        cbDoctor.setButtonCell(new ListCell<Cita.DoctorInfo>() {
+            @Override
+            protected void updateItem(Cita.DoctorInfo item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNombreCompleto());
+                }
+            }
+        });
+    }
+
+    private void cargarDoctores() {
+        try {
+            List<Cita.DoctorInfo> doctores = Cita.obtenerDoctoresDisponibles();
+            cbDoctor.setItems(FXCollections.observableArrayList(doctores));
+        } catch (SQLException e) {
+            mostrarError("Error", "No se pudieron cargar los doctores disponibles");
+            e.printStackTrace();
+        }
+    }
+
+    private void configurarEventos() {
+        btnAgendar.setOnAction(event -> agendarCita());
+        btnCancelar.setOnAction(event -> cerrarVentana());
+    }
+
+    public void setCedulaCliente(String cedulaCliente) {
+        this.cedulaCliente = cedulaCliente;
+    }
+
+    public void setUsuarioCliente(String usuarioCliente) {
+        this.usuarioCliente = usuarioCliente;
+        if (lblTitulo != null) {
+            lblTitulo.setText("Agendar Nueva Cita - " + usuarioCliente);
+        }
+    }
 
     @FXML
-    public void handleSave(ActionEvent event) {
-        LocalDate fecha = datePicker.getValue();
-        String especialidad = cbSpecialty.getValue();
-        String doctor = cbDoctor.getValue();
-        String descripcion = taDescription.getText();
-
-        // Aquí debes obtener el ID del cliente logeado para la cita.
-        //valor de ejemplo
-        String cedulaCliente = "ejemploCedulaCliente";
-
-        // Aquí debes obtener el ID del doctor seleccionado.
-        //valor de ejemplo
-
-        String cedulaDoctor = "ejemploCedulaDoctor";
-
-        if (fecha == null || especialidad == null || doctor == null || descripcion.isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Por favor, complete todos los campos.");
+    private void agendarCita() {
+        if (!validarDatos()) {
             return;
         }
 
-        String sql = "INSERT INTO citas (fecha, hora, cedula_cliente, cedula_doctor, descripcion, estado) VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            // Obtener datos del formulario
+            Cita.DoctorInfo doctorSeleccionado = cbDoctor.getValue();
+            LocalDate fechaSeleccionada = dpFecha.getValue();
+            String horaSeleccionada = cbHora.getValue();
+            String descripcion = taDescripcion.getText().trim();
 
-        try (Connection con = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = con.prepareStatement(sql)) {
+            // Convertir a tipos SQL
+            Date fecha = Date.valueOf(fechaSeleccionada);
+            Time hora = Time.valueOf(horaSeleccionada + ":00");
 
-            pstmt.setString(1, fecha.toString());
-            pstmt.setString(2, "08:00:00");
-            pstmt.setString(3, cedulaCliente);
-            pstmt.setString(4, cedulaDoctor);
-            pstmt.setString(5, descripcion);
-            pstmt.setString(6, "Pendiente");
+            // Crear la cita
+            boolean citaCreada = Cita.crearCita(
+                    doctorSeleccionado.cedula,
+                    cedulaCliente,
+                    fecha,
+                    hora,
+                    doctorSeleccionado.especialidad,
+                    descripcion,
+                    "Observaciones iniciales",
+                    "Pendiente de consulta"
+            );
 
-            pstmt.executeUpdate();
-            showAlert(Alert.AlertType.INFORMATION, "Éxito", "Cita guardada con éxito.");
-
-            handleCancel(event);
+            if (citaCreada) {
+                mostrarInfo("Éxito", "Cita agendada correctamente para el " +
+                        fechaSeleccionada + " a las " + horaSeleccionada);
+                cerrarVentana();
+            } else {
+                mostrarError("Error", "No se pudo agendar la cita. Inténtelo nuevamente.");
+            }
 
         } catch (SQLException e) {
+            if (e.getMessage().contains("uc_cita_doctor_hora")) {
+                mostrarError("Conflicto de horario",
+                        "El doctor ya tiene una cita programada en ese horario. " +
+                                "Por favor seleccione otro horario.");
+            } else {
+                mostrarError("Error de base de datos", e.getMessage());
+            }
             e.printStackTrace();
-            showAlert(Alert.AlertType.ERROR, "Error", "Error al guardar la cita en la base de datos.");
         }
+    }
+
+    private boolean validarDatos() {
+        if (cbDoctor.getValue() == null) {
+            mostrarError("Validation Error", "Por favor seleccione un doctor");
+            return false;
+        }
+
+        if (dpFecha.getValue() == null) {
+            mostrarError("Validation Error", "Por favor seleccione una fecha");
+            return false;
+        }
+
+        if (cbHora.getValue() == null) {
+            mostrarError("Validation Error", "Por favor seleccione una hora");
+            return false;
+        }
+
+        if (taDescripcion.getText().trim().isEmpty()) {
+            mostrarError("Validation Error", "Por favor ingrese una descripción del motivo de la cita");
+            return false;
+        }
+
+        // Validar que la fecha no sea en el pasado
+        if (dpFecha.getValue().isBefore(LocalDate.now())) {
+            mostrarError("Validation Error", "No se puede agendar una cita en una fecha pasada");
+            return false;
+        }
+
+        return true;
     }
 
     @FXML
-    public void handleCancel(ActionEvent event) {
-        try {
-            // Cerrar
-            javafx.scene.Node source = (javafx.scene.Node) event.getSource();
-            javafx.stage.Stage stage = (javafx.stage.Stage) source.getScene().getWindow();
-            stage.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Error al cerrar la ventana de nueva cita.");
-        }
+    private void cerrarVentana() {
+        Stage stage = (Stage) btnCancelar.getScene().getWindow();
+        stage.close();
     }
 
-    private void showAlert(Alert.AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
+    private void mostrarError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
         alert.setHeaderText(null);
-        alert.setContentText(message);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void mostrarInfo(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
         alert.showAndWait();
     }
 }

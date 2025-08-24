@@ -108,20 +108,19 @@ public class MainController {
     @SuppressWarnings("unused")
     private PauseTransition getPauseTransition(ActionEvent event) {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
-        delay.setOnFinished(e ->{
+        delay.setOnFinished(e -> {
             try {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Client-view.fxml"));
                 root = loader.load();
+                ClientController clientController = loader.getController();
+                clientController.initializeLabel(txtUsername.getText());
 
-                DoctorController doctorController = loader.getController();
-                doctorController.initializeLabel(txtUsername.getText());
-
-                root = FXMLLoader.load(getClass().getResource("Client-view.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root);
                 stage.setScene(scene);
                 stage.setTitle("Clinic data | panel de clientes");
-                //centrar la ventana
+
+                // Centrar la ventana
                 stage.centerOnScreen();
                 stage.show();
             } catch (IOException ex) {
