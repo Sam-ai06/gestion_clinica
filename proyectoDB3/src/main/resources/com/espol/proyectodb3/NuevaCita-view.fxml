@@ -41,5 +41,6 @@
 
     <Button fx:id="btnSave" layoutX="20.0" layoutY="278.0" prefHeight="37.0" prefWidth="98.0" style="-fx-background-color: #0b1447; -fx-text-fill: white; -fx-background-radius: 15;" text="Guardar Cita" />
     <Button fx:id="btnCancel" layoutX="129.0" layoutY="278.0" onAction="#handleCancel" prefHeight="37.0" prefWidth="105.0" style="-fx-background-color: #cccccc; -fx-background-radius: 15;" text="Cancelar" />
-   <AnchorPane layoutY="345.0" prefHeight="37.0" prefWidth="526.0" style="-fx-background-color: #0b1447;" />
+    <Button text="Guardar Cita" onAction="#handleSave"/>
+    <AnchorPane layoutY="345.0" prefHeight="37.0" prefWidth="526.0" style="-fx-background-color: #0b1447;" />
 </AnchorPane>
