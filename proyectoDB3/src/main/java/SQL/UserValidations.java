@@ -205,4 +205,23 @@ public class UserValidations {
             e.printStackTrace();
         }
     }
+
+    //eliminar un usuario
+    public void eliminarUsuario(String username, Label label){
+        String sql = "DELETE FROM personas WHERE usuario = ?";
+        try (Connection connection = DatabaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, username);
+            int rowsDeleted = statement.executeUpdate();
+            if (rowsDeleted > 0) {
+                label.setStyle("-fx-text-fill: green;");
+                label.setText("Usuario eliminado exitosamente.");
+            } else {
+                label.setText("Error al eliminar el usuario.");
+            }
+        } catch (SQLException e) {
+            System.out.println("error en la clase userValidations");
+            e.printStackTrace();
+        }
+    }
 }

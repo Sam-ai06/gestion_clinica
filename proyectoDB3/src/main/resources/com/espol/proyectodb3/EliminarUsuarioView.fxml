@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -8,7 +9,7 @@
 
 <AnchorPane prefHeight="339.0" prefWidth="554.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.proyectodb3.EliminarUsuarioController">
    <children>
-      <Button fx:id="btn_eliminarUser" layoutX="438.0" layoutY="281.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="89.0" style="-fx-background-color: #0b1447; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);" text="Eliminar" textFill="WHITE" />
+      <Button fx:id="btn_eliminarUser" layoutX="438.0" layoutY="281.0" mnemonicParsing="false" onAction="#eliminarUsuario" prefHeight="34.0" prefWidth="89.0" style="-fx-background-color: #0b1447; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);" text="Eliminar" textFill="WHITE" />
       <AnchorPane prefHeight="64.0" prefWidth="554.0" style="-fx-background-color: #0b1447;">
          <children>
             <Text fill="WHITE" layoutX="27.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Administrador - eliminar un usuario">
@@ -18,7 +19,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <Button fx:id="btn_cancelar" layoutX="339.0" layoutY="282.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="89.0" style="-fx-background-color: #0b1447; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="btn_cancelar" layoutX="339.0" layoutY="282.0" mnemonicParsing="false" onAction="#cancelarEliminacion" prefHeight="34.0" prefWidth="89.0" style="-fx-background-color: #0b1447; -fx-background-radius: 20; -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 10, 0.5, 0.0, 0.0);" text="Cancelar" textFill="WHITE" />
       <Text layoutX="40.0" layoutY="163.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuario de la persona a eliminar:" wrappingWidth="268.09033203125">
          <font>
             <Font size="18.0" />
@@ -26,5 +27,6 @@
       </Text>
       <TextField fx:id="txt_usuarioAeliminar" layoutX="303.0" layoutY="144.0" prefHeight="25.0" prefWidth="179.0" promptText="Usuario a eliminar" />
       <Text fill="#00000047" layoutX="40.0" layoutY="202.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RECUERDE: ESTA ACCIÓN ES IRREVERSIBLE, PROCEDA CON DUIDADO." />
+      <Label fx:id="lbl_msg" alignment="CENTER" layoutX="42.0" layoutY="94.0" prefHeight="17.0" prefWidth="467.0" textFill="RED" />
    </children>
 </AnchorPane>
