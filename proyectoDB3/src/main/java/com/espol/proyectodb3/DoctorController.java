@@ -33,7 +33,4 @@ public class DoctorController {
             lblInfo.setText("Error recetas: " + e.getMessage());
         }
     }
-
-    public void initializeLabel(String text) {
-    }
 }
