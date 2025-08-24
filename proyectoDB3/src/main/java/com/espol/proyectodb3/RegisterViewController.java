@@ -55,7 +55,7 @@ public class RegisterViewController {
     //inicializar los valores del comboBox
     @FXML
     public void initialize(){
-        comboRol.getItems().addAll("admin", "staff", "enfermero", "cliente");
+        comboRol.getItems().addAll("admin", "staff", "cliente");
     }
 
     @FXML

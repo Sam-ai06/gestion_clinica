@@ -71,32 +71,7 @@ public class MainController {
                 e.printStackTrace();
             }
 
-        } //vista enfermero
-        else if (UserValidations.validateUser(usuario, contrasenia, "enfermero")){
-            try {
-                LabelMsg.setText("redigiriendo...");
-                PauseTransition delay = new PauseTransition(Duration.seconds(2));
-                delay.setOnFinished(e ->{
-                    try {
-                        root = FXMLLoader.load(getClass().getResource("/com/espol/proyectodb3/Enfermero-view.fxml"));
-                        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-                        scene = new Scene(root);
-                        stage.setScene(scene);
-                        stage.setTitle("Clinic data | panel de enfermeria");
-                        //centrar la ventana
-                        stage.centerOnScreen();
-                        stage.show();
-                    } catch (IOException ex) {
-                        throw new RuntimeException(ex);
-                    }
-
-                });
-                delay.play();
-
-                } catch (Exception e){
-                    e.printStackTrace();
-                }
-        } //vista doctor
+        } //vista staff
         else if (UserValidations.validateUser(usuario, contrasenia, "staff")){ //validar y saltar a la vista de doctores
             try {
                 LabelMsg.setText("redigiriendo...");
@@ -130,7 +105,6 @@ public class MainController {
             LabelMsg.setText("Usuario o contraseña incorrectos");
         }
    }
-
     @SuppressWarnings("unused")
     private PauseTransition getPauseTransition(ActionEvent event) {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
