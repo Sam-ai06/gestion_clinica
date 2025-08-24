@@ -37,6 +37,12 @@ public class DoctorController implements Initializable {
     private ObservableList<Cita> appointmentsList = FXCollections.observableArrayList();
     private DatabaseConnection connection;
 
+    private String cedulaDoctor; 
+
+    public void setCedulaDoctor(String cedulaDoctor) { 
+        this.cedulaDoctor = cedulaDoctor;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -57,9 +63,11 @@ public class DoctorController implements Initializable {
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "SELECT c.id, c.fecha, c.hora, p.nombre, p.apellido, c.descripcion, c.estado "
-                    + "FROM citas c " + "JOIN personas p ON c.cedula_cliente = p.cedula "
+                    + "FROM citas c JOIN personas p ON c.cedula_cliente = p.cedula "
+                    + "WHERE c.cedula_doctor = ? " // <-- Filtra por el doctor
                     + "ORDER BY c.fecha, c.hora";
             PreparedStatement statement = con.prepareStatement(sql);
+            statement.setString(1, cedulaDoctor); // <-- Asigna la cédula del doctor
             ResultSet set = statement.executeQuery();
             appointmentsList.clear();
 
