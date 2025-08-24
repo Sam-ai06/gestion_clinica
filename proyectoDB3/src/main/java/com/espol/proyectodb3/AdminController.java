@@ -38,27 +38,6 @@ public class AdminController {
         stage.centerOnScreen();
         stage.show();
     }
-    //metodo para guardar usuarios nuevos
-    public boolean registerUser(String cedula, String nombre, String apellido, String edad, String correo, String telefono, String direccion,
-                                String usuario, String contrasena, String rol) {
-        //llamar a la vista de registro para que se muestre por encima del panel de admin
-        String sql = "INSERT INTO users (cedula, nombre, apellido, edad, correo, telefono, direccion, usuario, contrasena, rol)" +
-                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try{
-            DatabaseConnection.getConnection();
-            Statement stmt = DatabaseConnection.getConnection().createStatement();
-            @SuppressWarnings("unused")
-            PreparedStatement pstmt = stmt.getConnection().prepareStatement(sql);
-
-
-        }catch (SQLException e){
-            e.printStackTrace();
-            lbl_messageAdminPanel.setText("Error al registrar usuario: " + e.getMessage());
-            return false;
-        }
-        return false;
-    }
-
 
     @SuppressWarnings("unused")
     public void handleLogOut(javafx.event.ActionEvent event) {
@@ -78,11 +57,21 @@ public class AdminController {
                 }
             });
             delay.play();
-
-
         } catch (Exception e) {
             e.printStackTrace();
             lbl_messageAdminPanel.setText("Error al cerrar sesión.");
         }
+    }
+
+    //cambiar a la vista de eliminación de usuario
+    public void switchToEliminarUsuarioScene(javafx.event.ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("EliminarUsuarioView.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Clinic data | eliminar usuario");
+        //centrar la ventana
+        stage.centerOnScreen();
+        stage.show();
     }
 }
