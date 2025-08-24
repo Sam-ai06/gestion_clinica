@@ -139,8 +139,8 @@ public class MainController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Client-view.fxml"));
                 root = loader.load();
 
-                DoctorController clientController = loader.getController();
-                clientController.initializeLabel(txtUsername.getText());
+                DoctorController doctorController = loader.getController();
+                doctorController.initializeLabel(txtUsername.getText());
 
                 root = FXMLLoader.load(getClass().getResource("Client-view.fxml"));
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

@@ -149,5 +149,8 @@ public class DoctorController implements Initializable {
             lbl_msg.setText("Error al cerrar sesión.");
         }
     }
+
+    public void initializeLabel(String text) {
+    }
 }
 
