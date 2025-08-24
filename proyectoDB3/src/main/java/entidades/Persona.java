@@ -29,6 +29,10 @@ public class Persona {
         this.rol = rol;
     }
 
+    public Persona() {
+
+    }
+
     //getters y setters
     public String getCedula() {
         return cedula;
