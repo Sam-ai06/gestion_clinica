@@ -2,24 +2,35 @@ package entidades;
 
 import java.time.LocalDateTime;
 
-public class Admin extends Persona{
+public class Admin extends Persona {
+    private String telefono;
+    private String direccion1;
+    private String usuario;
+    private String contrasena;
+    private String rol;
     private String nivelAcceso = "medio";
     private LocalDateTime ultimoAcceso;
     private boolean puedeCrearUsuarios;
     private boolean puedeEliminarDatos;
 
-    //mega constructor de la clase:
-    public Admin(String cedula, String nombre, String apellido, int edad, String correo, String telefono, String direccion1,
-                 String usuario, String contrasena, String rol, String nivelAcceso, LocalDateTime ultimoAcceso,
+    // Constructor corregido
+    public Admin(String cedula, String nombre, String apellido, String edad, String correo,
+                 String telefono, String direccion1, String usuario, String contrasena, String rol,
+                 String nivelAcceso, LocalDateTime ultimoAcceso,
                  boolean puedeCrearUsuarios, boolean puedeEliminarDatos) {
-        super(cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contrasena, rol);
+        super(cedula, nombre, apellido, edad, correo);
+        this.telefono = telefono;
+        this.direccion1 = direccion1;
+        this.usuario = usuario;
+        this.contrasena = contrasena;
+        this.rol = rol;
         this.nivelAcceso = nivelAcceso;
         this.ultimoAcceso = ultimoAcceso;
         this.puedeCrearUsuarios = puedeCrearUsuarios;
         this.puedeEliminarDatos = puedeEliminarDatos;
     }
 
-    //getters y setters:
+    // Getters y setters
     public String getNivelAcceso() {
         return nivelAcceso;
     }
@@ -51,10 +62,7 @@ public class Admin extends Persona{
     public void setPuedeEliminarDatos(boolean puedeEliminarDatos) {
         this.puedeEliminarDatos = puedeEliminarDatos;
     }
-
-    //metodos para un administrador:
-
-}         
+}
 
 
 
