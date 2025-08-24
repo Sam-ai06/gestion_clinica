@@ -144,6 +144,92 @@ public class Cita {
                     rs.getString("diagnostico")
             );
         }
+
+        // Getters básicos
+        public int getCitaId() {
+            return citaId;
+        }
+
+        public String getDoctorCedula() {
+            return doctorCedula;
+        }
+
+        public String getDoctorNombre() {
+            return doctorNombre;
+        }
+
+        public String getDoctorApellido() {
+            return doctorApellido;
+        }
+
+        public String getClienteCedula() {
+            return clienteCedula;
+        }
+
+        public String getClienteNombre() {
+            return clienteNombre;
+        }
+
+        public String getClienteApellido() {
+            return clienteApellido;
+        }
+
+        public Date getFecha() {
+            return fecha;
+        }
+
+        public Time getHora() {
+            return hora;
+        }
+
+        public String getDepartamento() {
+            return departamento;
+        }
+
+        public String getEstado() {
+            return estado;
+        }
+
+        public String getDescripcion() {
+            return descripcion;
+        }
+
+        public String getObservaciones() {
+            return observaciones;
+        }
+
+        public String getDiagnostico() {
+            return diagnostico;
+        }
+
+        // Métodos formateados para la tabla del doctor
+        public String getFechaFormateada() {
+            return fecha.toString();
+        }
+
+        public String getPaciente() {
+            return clienteNombre + " " + clienteApellido;
+        }
+
+        public String getMotivo() {
+            return descripcion != null ? descripcion : "Sin descripción";
+        }
+
+        public String getAcciones() {
+            return "Ver detalles";
+        }
+
+        public String getHoraFormateada() {
+            return hora.toString();
+        }
+
+        public String getFechaHoraCompleta() {
+            return fecha.toString() + " " + hora.toString();
+        }
+
+        public String getDoctorCompleto() {
+            return "Dr. " + doctorNombre + " " + doctorApellido;
+        }
     }
 
     public static class CitaClienteRow {
@@ -242,6 +328,22 @@ public class Cita {
 
         public String getNombreCompleto() {
             return "Dr. " + nombre + " " + apellido + " (" + especialidad + ")";
+        }
+
+        public String getCedula() {
+            return cedula;
+        }
+
+        public String getNombre() {
+            return nombre;
+        }
+
+        public String getApellido() {
+            return apellido;
+        }
+
+        public String getEspecialidad() {
+            return especialidad;
         }
     }
 }

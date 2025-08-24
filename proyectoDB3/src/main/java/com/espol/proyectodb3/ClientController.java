@@ -77,7 +77,7 @@ public class ClientController implements Initializable {
     private void configurarEventosBotones() {
         btnMyAppointments.setOnAction(event -> cargarMisCitas());
         btnNewAppointment.setOnAction(event -> AgendarCita(event));
-        btnMedicalHistory.setOnAction(event -> mostrarHistorialMedico());
+        //btnMedicalHistory.setOnAction(event -> mostrarHistorialMedico());
     }
 
 

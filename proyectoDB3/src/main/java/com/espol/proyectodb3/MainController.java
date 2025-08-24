@@ -37,21 +37,21 @@ public class MainController {
 
 
 
-   @FXML
+    @FXML
     protected void switchToRegisterScene(ActionEvent event) throws IOException {
-       root = FXMLLoader.load(getClass().getResource("Register-view.fxml"));
-       stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-       scene = new Scene(root);
-       stage.setTitle("Clinic data | registro");
-       stage.setScene(scene);
-       stage.show();
+        root = FXMLLoader.load(getClass().getResource("Register-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setTitle("Clinic data | registro");
+        stage.setScene(scene);
+        stage.show();
 
-       // Centrar la ventana
-       stage.centerOnScreen();
-   }
+        // Centrar la ventana
+        stage.centerOnScreen();
+    }
 
-   @SuppressWarnings("unused")
-@FXML
+    @SuppressWarnings("unused")
+    @FXML
     protected void handleLogin(ActionEvent event){
         String usuario = txtUsername.getText();
         String contrasenia = txtPassword.getText();
@@ -71,14 +71,26 @@ public class MainController {
                 e.printStackTrace();
             }
 
-        } //vista staff
+        }
         else if (UserValidations.validateUser(usuario, contrasenia, "staff")){ //validar y saltar a la vista de doctores
             try {
                 LabelMsg.setText("redigiriendo...");
                 PauseTransition delay = new PauseTransition(Duration.seconds(2));
                 delay.setOnFinished(e ->{
                     try {
-                        root = FXMLLoader.load(getClass().getResource("Doctor-view.fxml"));
+                        // CAMBIO IMPORTANTE: Usar FXMLLoader con controlador
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("Doctor-view.fxml"));
+                        root = loader.load();
+
+                        // Obtener el controlador y establecer la cédula del doctor
+                        DoctorController doctorController = loader.getController();
+                        if (doctorController != null) {
+                            System.out.println("Estableciendo cédula del doctor: " + usuario);
+                            doctorController.setCedulaDoctor(usuario); // El username debería ser la cédula
+                        } else {
+                            System.err.println("ERROR: No se pudo obtener el DoctorController");
+                        }
+
                         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                         scene = new Scene(root);
                         stage.setScene(scene);
@@ -90,8 +102,8 @@ public class MainController {
                         throw new RuntimeException(ex);
                     }
 
-                        });
-                    delay.play();
+                });
+                delay.play();
 
             } catch (Exception e){
                 e.printStackTrace();
@@ -104,7 +116,7 @@ public class MainController {
         } else {
             LabelMsg.setText("Usuario o contraseña incorrectos");
         }
-   }
+    }
     @SuppressWarnings("unused")
     private PauseTransition getPauseTransition(ActionEvent event) {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
@@ -131,15 +143,15 @@ public class MainController {
     }
 
     public void switchToRecoverPasswordScene(ActionEvent event) throws IOException {
-       root = FXMLLoader.load(getClass().getResource("recoverPassword-view.fxml"));
-       stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-       scene = new Scene(root);
-       stage.setScene(scene);
-       stage.setTitle("Clinic data | recuperar contraseña");
-       //centrar la ventana
-       stage.centerOnScreen();
-       stage.show();
-   }
+        root = FXMLLoader.load(getClass().getResource("recoverPassword-view.fxml"));
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setTitle("Clinic data | recuperar contraseña");
+        //centrar la ventana
+        stage.centerOnScreen();
+        stage.show();
+    }
 
 
 }

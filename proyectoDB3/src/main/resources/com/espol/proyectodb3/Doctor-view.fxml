@@ -24,7 +24,7 @@
     <left>
         <AnchorPane prefWidth="200.0" style="-fx-background-color: #0e1958;">
             <children>
-                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Citas" />
+                <Button fx:id="btnAppointments" layoutX="25.0" layoutY="50.0" mnemonicParsing="false" onAction="#handleCitas" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Citas" />
                 <Button fx:id="btnPatients" layoutX="25.0" layoutY="100.0" mnemonicParsing="false" onAction="#handlePacientes" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Pacientes" />
                 <Button fx:id="btnPrescriptions" layoutX="25.0" layoutY="150.0" mnemonicParsing="false" onAction="#handleRecetas" prefWidth="150.0" style="-fx-background-color: #FFfFFF; -fx-background-radius: 15;" text="Recetas" />
             </children>
