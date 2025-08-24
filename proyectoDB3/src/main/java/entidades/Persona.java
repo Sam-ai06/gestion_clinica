@@ -1,116 +1,31 @@
 package entidades;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class Persona {
-    private String cedula;
-    private String nombre;
-    private String apellido;
-    private int edad;
-    private String correo;
-    private String telefono;
-    private String direccion1;
-    private String usuario;
-    private String contrasena;
-    private String rol;
+    private final SimpleStringProperty cedula;
+    private final SimpleStringProperty nombre;
+    private final SimpleStringProperty apellido;
+    private final SimpleStringProperty correo;
+    private final SimpleStringProperty rol;
 
-    //constructor gigante de la clase
-
-    public Persona(String cedula, String nombre, String apellido, int edad, String correo, String telefono,
-                   String direccion1, String usuario, String contrasena, String rol) {
-        this.cedula = cedula;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.edad = edad;
-        this.correo = correo;
-        this.telefono = telefono;
-        this.direccion1 = direccion1;
-
-        this.usuario = usuario;
-        this.contrasena = contrasena;
-        this.rol = rol;
+    public Persona(String cedula, String nombre, String apellido, String correo, String rol) {
+        this.cedula = new SimpleStringProperty(cedula);
+        this.nombre = new SimpleStringProperty(nombre);
+        this.apellido = new SimpleStringProperty(apellido);
+        this.correo = new SimpleStringProperty(correo);
+        this.rol = new SimpleStringProperty(rol);
     }
 
-    public Persona() {
+    public String getCedula() { return cedula.get(); }
+    public String getNombre() { return nombre.get(); }
+    public String getApellido() { return apellido.get(); }
+    public String getCorreo() { return correo.get(); }
+    public String getRol() { return rol.get(); }
 
-    }
-
-    //getters y setters
-    public String getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(String cedula) {
-        this.cedula = cedula;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public int getEdad() {
-        return edad;
-    }
-
-    public void setEdad(int edad) {
-        this.edad = edad;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getDireccion1() {
-        return direccion1;
-    }
-
-    public void setDireccion1(String direccion1) {
-        this.direccion1 = direccion1;
-    }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
+    public SimpleStringProperty cedulaProperty() { return cedula; }
+    public SimpleStringProperty nombreProperty() { return nombre; }
+    public SimpleStringProperty apellidoProperty() { return apellido; }
+    public SimpleStringProperty correoProperty() { return correo; }
+    public SimpleStringProperty rolProperty() { return rol; }
 }
