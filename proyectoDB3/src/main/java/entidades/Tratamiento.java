@@ -1,3 +1,5 @@
+package entidades;
+
 public class Tratamiento {
     private String nombre;
     private String descripcion;
