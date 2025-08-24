@@ -6,8 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cita {
+    String fecha;
+    String paciente;
+    String motivo;
+    String estado;
+    String verDetalles;
 
     public Cita(String fecha, String paciente, String motivo, String estado, String verDetalles) {
+        this.fecha  = fecha;
+        this.paciente = paciente;
+        this.motivo = motivo;
+        this.estado = estado;
+        this.verDetalles = verDetalles;
     }
 
     public static boolean crearCita(
