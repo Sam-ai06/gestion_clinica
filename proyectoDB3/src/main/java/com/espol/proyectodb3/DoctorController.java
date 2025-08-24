@@ -30,10 +30,14 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class DoctorController implements Initializable {
-    @FXML private TableView<Cita> tableAppointments;
-    @FXML private TableColumn<Cita, String> colDate, colPatient, colReason, colStatus, colActions;
-    @FXML private Button btnAppointments, btnPatients, btnPrescriptions, btnLogout;
-    @FXML private Label lbl_msg;
+    @FXML
+    private TableView<Cita> tableAppointments;
+    @FXML
+    private TableColumn<Cita, String> colDate, colPatient, colReason, colStatus, colActions;
+    @FXML
+    private Button btnAppointments, btnPatients, btnPrescriptions, btnLogout;
+    @FXML
+    private Label lbl_msg;
 
     private ObservableList<Cita> appointmentsList = FXCollections.observableArrayList();
     private DatabaseConnection connection;
@@ -61,7 +65,7 @@ public class DoctorController implements Initializable {
     }
 
     private void loadAppointmentsData() {
-        try{
+        try {
             Connection con = DatabaseConnection.getConnection();
             String sql = "SELECT c.id, c.fecha, c.hora, p.nombre, p.apellido, c.descripcion, c.estado "
                     + "FROM citas c JOIN personas p ON c.cedula_cliente = p.cedula "
@@ -72,7 +76,7 @@ public class DoctorController implements Initializable {
             ResultSet set = statement.executeQuery();
             appointmentsList.clear();
 
-            while (set.next()){
+            while (set.next()) {
                 String fecha = set.getDate("fecha").toString() + " " + set.getTime("hora").toString();
                 String paciente = set.getString("nombre") + " " + set.getString("apellido");
                 String motivo = set.getString("descripcion");
@@ -86,7 +90,7 @@ public class DoctorController implements Initializable {
     }
 
     @FXML
-    public void handleCitas(ActionEvent event){
+    public void handleCitas(ActionEvent event) {
         loadAppointmentsData();
     }
 
@@ -121,7 +125,7 @@ public class DoctorController implements Initializable {
     }
 
     @FXML
-    public void handleLogOut(ActionEvent event){
+    public void handleLogOut(ActionEvent event) {
         try {
             lbl_msg.setText("Cerrando sesión...");
             PauseTransition delay = new PauseTransition(Duration.seconds(2));
@@ -145,4 +149,5 @@ public class DoctorController implements Initializable {
             lbl_msg.setText("Error al cerrar sesión.");
         }
     }
+}
 
