@@ -31,23 +31,7 @@ public class RegisterViewController {
     @FXML
     private Label labelRegister;
     @FXML
-    private TextField txtCedula;
-    @FXML
-    private TextField txtNombre;
-    @FXML
-    private TextField txtApellido;
-    @FXML
-    private TextField txtEdad;
-    @FXML
-    private TextField txtCorreo;
-    @FXML
-    private TextField txtTelefono;
-    @FXML
-    private TextField txtDireccion;
-    @FXML
-    private TextField txtUsuario;
-    @FXML
-    private TextField txtContrasena;
+    private TextField txtCedula, txtNombre, txtApellido, txtEdad, txtCorreo, txtTelefono, txtDireccion, txtUsuario, txtContrasena;
     @FXML
     private ComboBox<String> comboRol;
 

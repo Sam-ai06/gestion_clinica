@@ -10,12 +10,12 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="526.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.proyectodb3.RegistrarStaffController">
+<AnchorPane prefHeight="526.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.espol.proyectodb3.RegistrarStaffController">
     <children>
         <Label layoutX="14.0" layoutY="14.0" style="-fx-font-size: 20; -fx-font-weight: bold;" text="Registrar un usuario nuevo" />
         <AnchorPane layoutY="479.0" prefHeight="48.0" prefWidth="600.0" style="-fx-background-color: #0b1447;" />
 
-        <GridPane hgap="10" layoutX="22.0" layoutY="60.0" prefHeight="350.0" prefWidth="550.0" vgap="10">
+        <GridPane hgap="10" layoutX="22.0" layoutY="73.0" prefHeight="350.0" prefWidth="550.0" vgap="10">
             <columnConstraints>
                 <ColumnConstraints prefWidth="150" />
                 <ColumnConstraints prefWidth="350" />
@@ -70,7 +70,8 @@
             <ComboBox fx:id="cbEspecialidadArea" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10" />
         </GridPane>
 
-        <Button fx:id="btnRegister" layoutX="22.0" layoutY="429.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="116.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15;" text="Registrar" textFill="WHITE" />
-        <Button fx:id="btn_cancelar" layoutX="152.0" layoutY="429.0" mnemonicParsing="false" onAction="#switchToAminPanel" prefHeight="30.0" prefWidth="116.0" style="-fx-background-color: #CCCCCC; -fx-background-radius: 15;" text="Cancelar" />
+        <Button fx:id="btnRegister" layoutX="22.0" layoutY="442.0" mnemonicParsing="false" onAction="#HandleAdminRegister" prefHeight="30.0" prefWidth="116.0" style="-fx-background-color: #0b1447; -fx-background-radius: 15;" text="Registrar" textFill="WHITE" />
+        <Button fx:id="btn_cancelar" layoutX="152.0" layoutY="442.0" mnemonicParsing="false" onAction="#switchToAminPanel" prefHeight="30.0" prefWidth="116.0" style="-fx-background-color: #CCCCCC; -fx-background-radius: 15;" text="Cancelar" />
+      <Label fx:id="lbl_msg" alignment="CENTER" layoutX="154.0" layoutY="44.0" prefHeight="17.0" prefWidth="330.0" textFill="RED" />
     </children>
 </AnchorPane>
