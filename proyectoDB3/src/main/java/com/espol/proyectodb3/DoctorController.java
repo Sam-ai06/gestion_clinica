@@ -90,11 +90,33 @@ public class DoctorController implements Initializable {
     }
 
     @FXML
-    public void handlePacientes() { //metodo para cambiar la tabla y mostrar a los pacientes de la clínica
+    public void handlePacientes() {
+        // Cambia la vista a la tabla de pacientes
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("Pacientes-view.fxml"));
+            Stage stage = (Stage) btnPatients.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            lbl_msg.setText("Error al mostrar pacientes.");
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    public void handleRecetas(){ //metodo para cambiar la tabla y mostrar las recetas enviadas
+    public void handleRecetas() {
+        // Cambia la vista a la tabla de recetas enviadas
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("Recetas-view.fxml"));
+            Stage stage = (Stage) btnPrescriptions.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+            stage.centerOnScreen();
+        } catch (IOException e) {
+            lbl_msg.setText("Error al mostrar recetas.");
+            e.printStackTrace();
+        }
     }
 
     @FXML
