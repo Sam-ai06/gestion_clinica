@@ -323,12 +323,118 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Vista para las citas de clientes
+CREATE OR REPLACE VIEW vw_citas_cliente AS
+SELECT
+  c.id AS cita_id,
+  c.cedula_doctor,
+  pD.nombre  AS doctor_nombre,
+  pD.apellido AS doctor_apellido,
+  d.especialidad AS doctor_especialidad,
+  c.cedula_cliente,
+  pC.nombre  AS cliente_nombre,
+  pC.apellido AS cliente_apellido,
+  c.fecha, 
+  c.hora, 
+  c.departamento, 
+  c.estado,
+  c.descripcion, 
+  c.observaciones, 
+  c.diagnostico
+FROM citas c
+JOIN personas pD ON pD.cedula = c.cedula_doctor
+JOIN personas pC ON pC.cedula = c.cedula_cliente
+JOIN doctores d ON d.cedula = c.cedula_doctor
+ORDER BY c.fecha DESC, c.hora DESC;
 
-
-
-
-
-
+-- Procedimiento para eliminar cita
+DELIMITER //
+CREATE PROCEDURE sp_eliminar_cita(
+    IN p_cita_id INT,
+    IN p_cedula_cliente VARCHAR(20)
+)
+BEGIN
+    DELETE FROM citas 
+    WHERE id = p_cita_id 
+    AND cedula_cliente = p_cedula_cliente;
+END//
+DELIMITER ;
  
  
+-- Procedimiento almacenado para crear citas
+DELIMITER //
+CREATE PROCEDURE sp_crear_cita(
+    IN p_cedula_doctor VARCHAR(20),
+    IN p_cedula_cliente VARCHAR(20),
+    IN p_fecha DATE,
+    IN p_hora TIME,
+    IN p_departamento VARCHAR(50),
+    IN p_descripcion TEXT,
+    IN p_observaciones TEXT,
+    IN p_diagnostico TEXT
+)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+        RESIGNAL;
+    END;
+    
+    START TRANSACTION;
+    
+    -- Verificar que el doctor existe y está disponible
+    IF NOT EXISTS (
+        SELECT 1 FROM doctores d 
+        JOIN personas p ON d.cedula = p.cedula 
+        WHERE d.cedula = p_cedula_doctor AND p.rol = 'staff'
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El doctor especificado no existe o no está activo';
+    END IF;
+    
+    -- Verificar que el cliente existe
+    IF NOT EXISTS (
+        SELECT 1 FROM clientes c 
+        JOIN personas p ON c.cedula = p.cedula 
+        WHERE c.cedula = p_cedula_cliente AND p.rol = 'cliente'
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El cliente especificado no existe';
+    END IF;
+    
+    -- Verificar que no haya conflicto de horario
+    IF EXISTS (
+        SELECT 1 FROM citas 
+        WHERE cedula_doctor = p_cedula_doctor 
+        AND fecha = p_fecha 
+        AND hora = p_hora 
+        AND estado NOT IN ('cancelada')
+    ) THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El doctor ya tiene una cita programada en ese horario';
+    END IF;
+    
+    -- Insertar la nueva cita
+    INSERT INTO citas (
+        cedula_doctor, 
+        cedula_cliente, 
+        fecha, 
+        hora, 
+        departamento, 
+        estado, 
+        descripcion, 
+        observaciones, 
+        diagnostico
+    ) VALUES (
+        p_cedula_doctor,
+        p_cedula_cliente,
+        p_fecha,
+        p_hora,
+        p_departamento,
+        'pendiente',
+        p_descripcion,
+        p_observaciones,
+        p_diagnostico
+    );
+    
+    COMMIT;
+END//
+DELIMITER ;
  
