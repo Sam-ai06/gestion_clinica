@@ -2,6 +2,7 @@ package com.espol.proyectodb3;
 
 import SQL.DatabaseConnection;
 import entidades.Cita;
+import entidades.Cliente;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -90,11 +91,52 @@ public class DoctorController implements Initializable {
     }
 
     @FXML
-    public void handlePacientes() { //metodo para cambiar la tabla y mostrar a los pacientes de la clínica
+    public void handlePacientes() {//metodo para cambiar la tabla y mostrar a los pacientes de la clínica
+            // Definir nuevas columnas si es necesario
+            TableColumn<Cliente, String> colNombre = new TableColumn<>("Nombre");
+            TableColumn<Cliente, String> colApellido = new TableColumn<>("Apellido");
+            TableColumn<Cliente, String> colCedula = new TableColumn<>("Cédula");
+            TableColumn<Cliente, String> colTelefono = new TableColumn<>("Teléfono");
+
+            colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+            colApellido.setCellValueFactory(new PropertyValueFactory<>("apellido"));
+            colCedula.setCellValueFactory(new PropertyValueFactory<>("cedula"));
+            colTelefono.setCellValueFactory(new PropertyValueFactory<>("telefono"));
+
+            // Limpiar columnas y datos anteriores
+            tableAppointments.getColumns().clear();
+            tableAppointments.getItems().clear();
+
+            // Agregar las nuevas columnas
+            tableAppointments.getColumns().addAll(colNombre, colApellido, colCedula, colTelefono);
+
+            ObservableList<Cliente> pacientesList = FXCollections.observableArrayList();
+
+            try {
+                Connection con = DatabaseConnection.getConnection();
+                String sql = "SELECT nombre, apellido, cedula, telefono FROM personas WHERE tipo = 'paciente'";
+                PreparedStatement statement = con.prepareStatement(sql);
+                ResultSet set = statement.executeQuery();
+
+                while (set.next()) {
+                    String nombre = set.getString("nombre");
+                    String apellido = set.getString("apellido");
+                    String cedula = set.getString("cedula");
+                    String telefono = set.getString("telefono");
+                    pacientesList.add(new Cliente(nombre, apellido, cedula, telefono));
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            tableAppointments.setItems(pacientesList);
+        }
     }
+
 
     @FXML
     public void handleRecetas(){ //metodo para cambiar la tabla y mostrar las recetas enviadas
+
     }
 
     @FXML
