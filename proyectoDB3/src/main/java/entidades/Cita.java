@@ -117,6 +117,7 @@ public class Cita {
         public final Date fecha;
         public final Time hora;
         public final String departamento, estado, descripcion, observaciones, diagnostico;
+        public int id;
 
         private CitaRow(int id, String dCed, String dNom, String dApe,
                         String cCed, String cNom, String cApe,
@@ -344,6 +345,26 @@ public class Cita {
 
         public String getEspecialidad() {
             return especialidad;
+        }
+    }
+
+    public static boolean actualizarEstadoCita(int citaId, String nuevoEstado) {
+        String sql = "UPDATE citas SET estado = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, nuevoEstado);
+            stmt.setInt(2, citaId);
+
+            int filasAfectadas = stmt.executeUpdate();
+
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Error actualizando estado de cita: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 }

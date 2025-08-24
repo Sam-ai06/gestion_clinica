@@ -34,9 +34,6 @@ public class MainController {
     @FXML
     private Label LabelMsg;
 
-
-
-
     @FXML
     protected void switchToRegisterScene(ActionEvent event) throws IOException {
         root = FXMLLoader.load(getClass().getResource("Register-view.fxml"));
@@ -78,15 +75,22 @@ public class MainController {
                 PauseTransition delay = new PauseTransition(Duration.seconds(2));
                 delay.setOnFinished(e ->{
                     try {
-                        // CAMBIO IMPORTANTE: Usar FXMLLoader con controlador
+                        // Usar FXMLLoader con controlador
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("Doctor-view.fxml"));
                         root = loader.load();
 
                         // Obtener el controlador y establecer la cédula del doctor
                         DoctorController doctorController = loader.getController();
                         if (doctorController != null) {
-                            System.out.println("Estableciendo cédula del doctor: " + usuario);
-                            doctorController.setCedulaDoctor(usuario); // El username debería ser la cédula
+                            // Obtener la cédula real del doctor usando su usuario
+                            String cedulaDoctor = UserValidations.obtenerCedulaPorUsuario(usuario, "staff");
+
+                            if (cedulaDoctor != null) {
+                                doctorController.setCedulaDoctor(cedulaDoctor);
+                            } else {
+                                System.err.println("ERROR: No se pudo obtener la cédula del doctor para usuario: " + usuario);
+                                LabelMsg.setText("Error: No se encontró información del doctor");
+                            }
                         } else {
                             System.err.println("ERROR: No se pudo obtener el DoctorController");
                         }
@@ -99,24 +103,39 @@ public class MainController {
                         stage.centerOnScreen();
                         stage.show();
                     } catch (IOException ex) {
-                        throw new RuntimeException(ex);
+                        System.err.println("Error cargando vista de doctor: " + ex.getMessage());
+                        ex.printStackTrace();
                     }
 
                 });
                 delay.play();
 
             } catch (Exception e){
+                System.err.println("Error en login de staff: " + e.getMessage());
                 e.printStackTrace();
             }
-        } else if (UserValidations.validateUser(usuario, contrasenia, "cliente")){ //validar y saltar a la vista de cliente
+        }
+        else if (UserValidations.validateUser(usuario, contrasenia, "cliente")){ //validar y saltar a la vista de cliente
             LabelMsg.setText("redigiriendo...");
 
             PauseTransition delay = getPauseTransition(event);
             delay.play();
-        } else {
+        }
+        else if (UserValidations.validateUser(usuario, contrasenia, "enfermero")){ //validar y saltar a la vista de enfermero
+            try {
+                LabelMsg.setText("redigiriendo...");
+                // Aquí puedes agregar la lógica para enfermeros si la necesitas
+                LabelMsg.setText("Funcionalidad de enfermero en desarrollo");
+            } catch (Exception e) {
+                System.err.println("Error en login de enfermero: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        else {
             LabelMsg.setText("Usuario o contraseña incorrectos");
         }
     }
+
     @SuppressWarnings("unused")
     private PauseTransition getPauseTransition(ActionEvent event) {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
@@ -125,7 +144,18 @@ public class MainController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Client-view.fxml"));
                 root = loader.load();
                 ClientController clientController = loader.getController();
-                clientController.initializeLabel(txtUsername.getText());
+
+                if (clientController != null) {
+                    // También obtener la cédula del cliente para consistencia
+                    String cedulaCliente = UserValidations.obtenerCedulaPorUsuario(txtUsername.getText(), "cliente");
+                    if (cedulaCliente != null) {
+                        clientController.initializeLabel(txtUsername.getText());
+                        // Si tienes un método para establecer la cédula del cliente, úsalo aquí:
+                        // clientController.setCedulaCliente(cedulaCliente);
+                    }
+                } else {
+                    System.err.println("ERROR: No se pudo obtener el ClientController");
+                }
 
                 stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 scene = new Scene(root);
@@ -136,7 +166,8 @@ public class MainController {
                 stage.centerOnScreen();
                 stage.show();
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                System.err.println("Error cargando vista de cliente: " + ex.getMessage());
+                ex.printStackTrace();
             }
         });
         return delay;
@@ -152,6 +183,4 @@ public class MainController {
         stage.centerOnScreen();
         stage.show();
     }
-
-
 }

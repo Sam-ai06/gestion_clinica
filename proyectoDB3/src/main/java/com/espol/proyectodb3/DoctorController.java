@@ -7,8 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.geometry.Insets;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class DoctorController implements Initializable {
@@ -64,13 +67,11 @@ public class DoctorController implements Initializable {
 
     public void setCedulaDoctor(String cedula) {
         this.cedulaDoctor = cedula;
-        System.out.println("Doctor cedula establecida: " + cedula);
         cargarCitasDelDoctor();
     }
 
     @FXML
     private void handleCitas() {
-        System.out.println("Botón Citas presionado");
         cargarCitasDelDoctor();
         if (lbl_msg != null) {
             lbl_msg.setText("Vista de Citas cargada");
@@ -79,7 +80,6 @@ public class DoctorController implements Initializable {
 
     @FXML
     private void handlePacientes() {
-        System.out.println("Botón Pacientes presionado");
         if (lbl_msg != null) {
             lbl_msg.setText("Vista de Pacientes seleccionada");
         }
@@ -87,7 +87,6 @@ public class DoctorController implements Initializable {
 
     @FXML
     private void handleRecetas() {
-        System.out.println("Botón Recetas presionado");
         if (lbl_msg != null) {
             lbl_msg.setText("Vista de Recetas seleccionada");
         }
@@ -95,7 +94,7 @@ public class DoctorController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        System.out.println("Cerrando sesión");
+        // Lógica para cerrar sesión
     }
 
     public void cargarCitasDelDoctor() {
@@ -107,21 +106,13 @@ public class DoctorController implements Initializable {
                 return;
             }
 
-            System.out.println("Cargando citas para doctor: " + cedulaDoctor);
             var lista = Cita.obtenerCitasPorDoctor(cedulaDoctor);
 
             if (tableAppointments != null) {
                 tableAppointments.setItems(FXCollections.observableArrayList(lista));
-                System.out.println("Citas cargadas: " + lista.size());
 
                 if (lbl_msg != null) {
                     lbl_msg.setText("Citas cargadas: " + lista.size());
-                }
-
-                // Debug: imprimir las citas encontradas
-                for (Cita.CitaRow cita : lista) {
-                    System.out.println("Cita: " + cita.clienteNombre + " " + cita.clienteApellido +
-                            " - " + cita.fecha + " " + cita.hora);
                 }
             }
         } catch (Exception e) {
@@ -134,18 +125,133 @@ public class DoctorController implements Initializable {
     }
 
     private void verDetallesCita(Cita.CitaRow cita) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Detalles de la Cita");
-        alert.setHeaderText("Información de la Cita");
-        alert.setContentText(
-                "Paciente: " + cita.clienteNombre + " " + cita.clienteApellido + "\n" +
-                        "Fecha: " + cita.fecha + "\n" +
-                        "Hora: " + cita.hora + "\n" +
-                        "Departamento: " + cita.departamento + "\n" +
-                        "Estado: " + cita.estado + "\n" +
-                        "Descripción: " + (cita.descripcion != null ? cita.descripcion : "Sin descripción")
-        );
-        alert.showAndWait();
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Gestión de Cita");
+        dialog.setHeaderText("Cita de " + cita.clienteNombre + " " + cita.clienteApellido);
+
+        // Crear el contenido del diálogo
+        GridPane grid = new GridPane();
+        grid.setHgap(15);
+        grid.setVgap(15);
+        grid.setPadding(new Insets(20, 20, 10, 10));
+
+        // Información de la cita (solo lectura)
+        grid.add(new Label("📅 Fecha:"), 0, 0);
+        Label lblFecha = new Label(cita.fecha.toString());
+        lblFecha.setStyle("-fx-font-weight: bold;");
+        grid.add(lblFecha, 1, 0);
+
+        grid.add(new Label("🕐 Hora:"), 0, 1);
+        Label lblHora = new Label(cita.hora.toString());
+        lblHora.setStyle("-fx-font-weight: bold;");
+        grid.add(lblHora, 1, 1);
+
+        grid.add(new Label("🏥 Departamento:"), 0, 2);
+        grid.add(new Label(cita.departamento), 1, 2);
+
+        grid.add(new Label("📝 Descripción:"), 0, 3);
+        TextArea txtDescripcion = new TextArea(cita.descripcion != null ? cita.descripcion : "Sin descripción");
+        txtDescripcion.setEditable(false);
+        txtDescripcion.setPrefRowCount(2);
+        txtDescripcion.setPrefColumnCount(30);
+        grid.add(txtDescripcion, 1, 3);
+
+        // ComboBox para cambiar estado
+        grid.add(new Label("⚡ Cambiar Estado:"), 0, 4);
+        ComboBox<String> estadoCombo = new ComboBox<>();
+        estadoCombo.getItems().addAll("pendiente", "en_curso", "completada", "cancelada");
+        estadoCombo.setValue(cita.estado);
+        estadoCombo.setStyle("-fx-font-size: 14px;");
+
+        // Agregar colores según el estado
+        estadoCombo.setOnAction(e -> {
+            String selectedState = estadoCombo.getValue();
+            switch (selectedState) {
+                case "pendiente":
+                    estadoCombo.setStyle("-fx-base: #FFF3CD; -fx-font-size: 14px;"); // Amarillo
+                    break;
+                case "en_curso":
+                    estadoCombo.setStyle("-fx-base: #CCE5FF; -fx-font-size: 14px;"); // Azul
+                    break;
+                case "completada":
+                    estadoCombo.setStyle("-fx-base: #D4EDDA; -fx-font-size: 14px;"); // Verde
+                    break;
+                case "cancelada":
+                    estadoCombo.setStyle("-fx-base: #F8D7DA; -fx-font-size: 14px;"); // Rojo
+                    break;
+            }
+        });
+
+        grid.add(estadoCombo, 1, 4);
+
+        // Label informativo
+        Label infoLabel = new Label("💡 Selecciona el nuevo estado y presiona 'Actualizar'");
+        infoLabel.setStyle("-fx-font-size: 12px; -fx-text-fill: #666;");
+        grid.add(infoLabel, 0, 5, 2, 1);
+
+        dialog.getDialogPane().setContent(grid);
+
+        // Botones
+        ButtonType btnActualizar = new ButtonType("✅ Actualizar Estado", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnCerrar = new ButtonType("❌ Cerrar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnActualizar, btnCerrar);
+
+        // Estilo del diálogo
+        dialog.getDialogPane().setStyle("-fx-font-family: 'Segoe UI'; -fx-font-size: 13px;");
+
+        // Convertir resultado
+        dialog.setResultConverter(dialogButton -> {
+            if (dialogButton == btnActualizar) {
+                return estadoCombo.getValue();
+            }
+            return null;
+        });
+
+        Optional<String> resultado = dialog.showAndWait();
+
+        if (resultado.isPresent() && !resultado.get().equals(cita.estado)) {
+            cambiarEstadoCita(cita.citaId, resultado.get(), cita.clienteNombre + " " + cita.clienteApellido);
+        }
+    }
+
+    private void cambiarEstadoCita(int citaId, String nuevoEstado, String nombrePaciente) {
+        try {
+            boolean exitoso = Cita.actualizarEstadoCita(citaId, nuevoEstado);
+
+            if (exitoso) {
+                // Mostrar mensaje de éxito
+                Alert confirmacion = new Alert(Alert.AlertType.INFORMATION);
+                confirmacion.setTitle("✅ Estado Actualizado");
+                confirmacion.setHeaderText("Actualización Exitosa");
+                confirmacion.setContentText("El estado de la cita de " + nombrePaciente +
+                        " se actualizó a: " + nuevoEstado.replace("_", " ").toUpperCase());
+                confirmacion.showAndWait();
+
+                // Refrescar la tabla
+                cargarCitasDelDoctor();
+
+                if (lbl_msg != null) {
+                    lbl_msg.setText("Estado de cita actualizado exitosamente");
+                }
+            } else {
+                // Mostrar mensaje de error
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("❌ Error");
+                error.setHeaderText("No se pudo actualizar");
+                error.setContentText("Hubo un problema al actualizar el estado de la cita. Verifica que el ID de la cita sea válido.");
+                error.showAndWait();
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error cambiando estado de cita: " + e.getMessage());
+            e.printStackTrace();
+
+            Alert error = new Alert(Alert.AlertType.ERROR);
+            error.setTitle("❌ Error del Sistema");
+            error.setHeaderText("Error Interno");
+            error.setContentText("Error interno: " + e.getMessage());
+            error.showAndWait();
+        }
     }
 
     public void cargarRecetasDelDoctor() {

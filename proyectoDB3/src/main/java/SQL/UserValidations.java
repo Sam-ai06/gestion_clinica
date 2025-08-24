@@ -36,6 +36,34 @@ public class UserValidations {
         }
     }
 
+    // ✅ NUEVO MÉTODO: Obtener cédula por usuario y rol
+    public static String obtenerCedulaPorUsuario(String usuario, String rol) {
+        String cedula = null;
+        String sql = "SELECT cedula FROM personas WHERE usuario = ? AND rol = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, usuario);
+            stmt.setString(2, rol);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                cedula = rs.getString("cedula");
+                System.out.println("Cédula encontrada para usuario '" + usuario + "': " + cedula);
+            } else {
+                System.err.println("No se encontró cédula para usuario: " + usuario + " con rol: " + rol);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error obteniendo cédula por usuario: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return cedula;
+    }
+
     public static void guardarRegistro(String cedula, String nombre, String apellido, int edad, String correo,
                                        String telefono, String direccion1, String usuario, String contrasena, String rol) {
 
@@ -164,20 +192,20 @@ public class UserValidations {
     //validar usuario
     public boolean validateUser(String user){
         String sql = "SELECT * FROM personas WHERE usuario = ?";
-       try{
-              Connection connection = DatabaseConnection.getConnection();
-              PreparedStatement statement = connection.prepareStatement(sql);
-              statement.setString(1, user);
-              ResultSet resultSet = statement.executeQuery();
-              if (resultSet.next()){
+        try{
+            Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, user);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
                 return true;
-              } else {
+            } else {
                 return false;
-              }
-         } catch (SQLException e){
-              e.printStackTrace();
-              return false;
-       }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
 
     }
 
