@@ -139,7 +139,7 @@ public class MainController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("Client-view.fxml"));
                 root = loader.load();
 
-                ClientController clientController = loader.getController();
+                DoctorController clientController = loader.getController();
                 clientController.initializeLabel(txtUsername.getText());
 
                 root = FXMLLoader.load(getClass().getResource("Client-view.fxml"));
