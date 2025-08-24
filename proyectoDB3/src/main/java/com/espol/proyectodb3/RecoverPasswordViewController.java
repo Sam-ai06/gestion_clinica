@@ -6,6 +6,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -16,7 +17,9 @@ public class RecoverPasswordViewController {
     @FXML
     private Button btn_verify;
     @FXML
-    private TextField txt_user;
+    private TextField txt_user, txt_password;
+    @FXML
+    private Label lbl_msg;
 
     @FXML
     private Stage stage;
@@ -33,4 +36,17 @@ public class RecoverPasswordViewController {
         stage.centerOnScreen();
         stage.show();
     }
+
+    //cambiar la contraseña y cerrar
+    public void cambiarPassword(){
+        try{
+            if (txt_user.getText() == "" || txt_password.getText() == ""){
+                lbl_msg.setText("Error. Debe rellenar todos los campos");
+            }
+
+        }
+
+    }
+
+
 }
