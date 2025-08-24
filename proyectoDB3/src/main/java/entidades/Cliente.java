@@ -9,6 +9,12 @@ public class Cliente extends Persona{
         super(cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contrasena, rol);
         this.agendaCita = agendaCita;
     }
+
+    public Cliente(String nombre, String apellido, String cedula, int telefono) {
+        super();
+
+    }
+
     //getters y setters
     public boolean isAgendaCita() {
         return agendaCita;
