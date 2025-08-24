@@ -1,7 +1,7 @@
 package com.espol.proyectodb3;
 
-import com.espol.proyectodb3.SQL.Cita;
-import com.espol.proyectodb3.SQL.Tratamiento;
+import entidades.Cita;
+import entidades.Tratamiento;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 
