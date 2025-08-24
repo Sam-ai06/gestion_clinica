@@ -1,6 +1,10 @@
 create database clinicdb;
 use clinicdb;
 
+SHOW TABLES;
+-- ver contenido de la vista
+select * from new_view;
+
 -- creación de tablas
  -- tabla usuarios generales
  CREATE TABLE personas(
@@ -23,14 +27,14 @@ use clinicdb;
  FOREIGN KEY (cedula) REFERENCES personas(cedula) ON DELETE CASCADE
  );
  
- -- enfermeros
+ -- staff enfermeros
  CREATE TABLE enfermeros(
  cedula VARCHAR(10) PRIMARY KEY,
  area VARCHAR(30) NOT NULL,
  FOREIGN KEY (cedula) REFERENCES personas(cedula) ON DELETE CASCADE
  );
  
- -- administradores 
+ -- staff administradores 
 CREATE TABLE administradores (
     cedula VARCHAR(20) PRIMARY KEY,
     nivel_acceso ENUM('alto', 'medio', 'bajo') DEFAULT 'medio', -- diferentes niveles de administración / poder
@@ -64,8 +68,26 @@ CREATE TABLE citas (
     CONSTRAINT uc_cita_doctor_hora UNIQUE (cedula_doctor, fecha, hora)  
 );
 
+-- tabla tratamientos
+create table tratamientos(
+id int primary key,
+cita_id int not null,
+cedula_doctor varchar(20) not null,
+cedula_cliente varchar(20) not null,
+receta text not null,
+fecha datetime not null default now(),
+FOREIGN KEY (cita_id) REFERENCES citas(id) ON DELETE CASCADE,
+FOREIGN KEY (cedula_doctor) REFERENCES doctores(cedula),
+FOREIGN KEY (cedula_cliente) REFERENCES clientes(cedula),
+INDEX idx_tratamientos_doctor (cedula_doctor),
+INDEX idx_tratamientos_cliente (cedula_cliente),
+INDEX idx_tratamientos_cita (cita_id)
+);
+
+
 -- modificar el campo contraseñas para guardar hashedpasswords
 ALTER TABLE personas MODIFY contraseña VARCHAR(255);
+ALTER TABLE personas DROP column direccion2;
 
 -- poblacion de tablas con datos de ejemplo
 INSERT INTO personas (cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contraseña, rol) VALUES
@@ -85,9 +107,8 @@ INSERT INTO personas (cedula, nombre, apellido, edad, correo, telefono, direccio
 ('0989012345', 'Rosa', 'Herrera', 48, 'rosa.herrera@outlook.com', '0910987654', 'Sector Sur 2', 'rherrera', '$2y$10$J2gKvCq2i.tT9VpPMm7p.4h3kTvKkQk.yLg4uvPr6Dt.1k3VzU6f', 'cliente');
 
 INSERT INTO personas (cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contraseña, rol) VALUES
-('0990123456', 'Samuel', 'Villa', 33, 'samuel.villa@hospital.com', '0909876543', 'Calle Nueva 789', 'samvilla', '$2y$10$K3hLwDr3j.uU0WqQNn8q.5i4lUwLlRl.zMh5vwQs7Eu.2l4WzV7g', 'admin');
+('0990123456', 'Samuel', 'Villa', 33, 'samuel.villa@hospital.com', '0909876543', 'Calle Nueva 789', 'samvillasp_registrar_usuariolim', '$2y$10$K3hLwDr3j.uU0WqQNn8q.5i4lUwLlRl.zMh5vwQs7Eu.2l4WzV7g', 'admin');
 select * from personas;
-truncate table personas;
 
 -- Insertar datos en tabla administradores
 INSERT INTO administradores (cedula, nivel_acceso, puede_crear_usuarios, puede_eliminar_datos, ultimo_acceso) VALUES
@@ -134,14 +155,11 @@ create unique index idx_personas_correo ON personas(correo);
 
 -- indices en la tabla enfermeros
 -- por su rol
-ALTER TABLE enfermeros DROP INDEX idx_area;
-CREATE INDEX idx_area ON enfermeros(area);
-
+create unique index idx_area on enfermeros(area);
 
 -- indices en la tabla enfermeros
 -- por su especialidad
-ALTER TABLE doctores DROP INDEX idx_especialidad;
-CREATE UNIQUE INDEX idx_especialidad ON doctores(especialidad);
+create unique index idx_especialidad on doctores(especialidad);
 
 -- indices en la tabla citas
 CREATE INDEX idx_citas_cliente ON citas(cedula_cliente);
@@ -203,8 +221,109 @@ END //
 DELIMITER ;
 
 drop procedure sp_registrar_usuario;
-
 -- llamada (call) al procedimiento en el java
+
+-- scripts de consulta
+-- 1. Listar todos los usuarios del sistema con sus roles
+SELECT cedula, nombre, apellido, rol FROM personas ORDER BY rol, apellido;
+
+-- cantidad de personas por rol
+SELECT rol, COUNT(*) as cantidad 
+FROM personas 
+GROUP BY rol 
+ORDER BY cantidad DESC;
+
+-- citas por doctor
+CREATE OR REPLACE VIEW view_citas_doctor AS
+SELECT
+  c.id AS cita_id,
+  c.cedula_doctor,
+  pD.nombre  AS doctor_nombre,
+  pD.apellido AS doctor_apellido,
+  c.cedula_cliente,
+  pC.nombre  AS cliente_nombre,
+  pC.apellido AS cliente_apellido,
+  c.fecha, c.hora, c.departamento, c.estado,
+  c.descripcion, c.observaciones, c.diagnostico
+FROM citas c
+JOIN personas pD ON pD.cedula = c.cedula_doctor
+JOIN personas pC ON pC.cedula = c.cedula_cliente;
+
+-- vistas para tratamientos
+CREATE OR REPLACE VIEW vw_tratamientos_doctor AS
+SELECT
+  t.id AS tratamiento_id,
+  t.cita_id,
+  t.cedula_doctor,
+  pD.nombre  AS doctor_nombre,
+  pD.apellido AS doctor_apellido,
+  t.cedula_cliente,
+  pC.nombre  AS cliente_nombre,
+  pC.apellido AS cliente_apellido,
+  t.receta,
+  t.fecha
+FROM tratamientos t
+JOIN personas pD ON pD.cedula = t.cedula_doctor
+JOIN personas pC ON pC.cedula = t.cedula_cliente;
+
+-- vista usuarios para admin
+CREATE OR REPLACE VIEW vw_personas_resumen AS
+SELECT cedula, nombre, apellido, edad, correo, telefono, direccion1 AS direccion, usuario, rol
+FROM personas;
+
+-- stored procedure para que el admin registre un usuario
+DELIMITER //
+CREATE PROCEDURE sp_admin_registrar_usuario(
+  IN p_cedula VARCHAR(10),
+  IN p_nombre VARCHAR(15),
+  IN p_apellido VARCHAR(15),
+  IN p_edad INT,
+  IN p_correo VARCHAR(30),
+  IN p_telefono VARCHAR(10),
+  IN p_direccion VARCHAR(20),
+  IN p_usuario VARCHAR(10),
+  IN p_contrasena VARCHAR(255),
+  IN p_rol ENUM('admin','staff','enfermero','cliente'),
+  IN p_especialidad VARCHAR(20),
+  IN p_area VARCHAR(30),
+  IN p_nivel_acceso ENUM('alto','medio','bajo')
+)
+BEGIN
+  START TRANSACTION;
+
+  INSERT INTO personas(cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contraseña, rol)
+  VALUES (p_cedula, p_nombre, p_apellido, p_edad, p_correo, p_telefono, p_direccion, p_usuario, p_contrasena, p_rol);
+
+  IF p_rol = 'staff' THEN
+    INSERT INTO doctores(cedula, especialidad) VALUES (p_cedula, COALESCE(p_especialidad,'General'));
+  ELSEIF p_rol = 'enfermero' THEN
+    INSERT INTO enfermeros(cedula, area) VALUES (p_cedula, COALESCE(p_area,'General'));
+  ELSEIF p_rol = 'admin' THEN
+    INSERT INTO administradores(cedula, nivel_acceso, puede_crear_usuarios, puede_eliminar_datos, ultimo_acceso)
+    VALUES (p_cedula, COALESCE(p_nivel_acceso,'medio'), TRUE, FALSE, NOW());
+  ELSEIF p_rol = 'cliente' THEN
+    INSERT INTO clientes(cedula, puede_agendar_citas) VALUES (p_cedula, TRUE);
+  END IF;
+
+  COMMIT;
+END//
+DELIMITER ;
+
+-- admin: eliminar usuario por nombre o correo
+DELIMITER //
+CREATE PROCEDURE sp_admin_eliminar_usuario(
+  IN p_nombre VARCHAR(15),
+  IN p_correo VARCHAR(30)
+)
+BEGIN
+  -- elimina por match exacto en nombre o correo
+  DELETE FROM personas
+   WHERE (p_nombre IS NOT NULL AND nombre = p_nombre)
+      OR (p_correo IS NOT NULL AND correo = p_correo);
+END//
+DELIMITER ;
+
+
 
 
 

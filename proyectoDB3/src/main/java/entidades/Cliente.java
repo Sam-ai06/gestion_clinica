@@ -1,27 +1,25 @@
 package entidades;
 
-public class Cliente extends Persona{
+public class Cliente extends Persona {
     boolean agendaCita = true;
 
-    //mega constructor
-    public Cliente(String cedula, String nombre, String apellido, int edad, String correo, String telefono, String direccion1,
-                   String usuario, String contrasena, String rol, boolean agendaCita) {
-        super(cedula, nombre, apellido, edad, correo, telefono, direccion1, usuario, contrasena, rol);
+    // Constructor corregido
+    public Cliente(String cedula, String nombre, String apellido, String edad, String correo, boolean agendaCita) {
+        super(cedula, nombre, apellido, edad, correo);
         this.agendaCita = agendaCita;
     }
 
-    public Cliente(String nombre, String apellido, String cedula, int telefono) {
-        super();
-
+    // Constructor alternativo (ajustado)
+    public Cliente(String nombre, String apellido, String cedula, String edad, String correo) {
+        super(cedula, nombre, apellido, edad, correo);
     }
 
-    //getters y setters
+    // Getters y setters
     public boolean isAgendaCita() {
         return agendaCita;
     }
 
     public void setAgendaCita(boolean agendaCita) {
         this.agendaCita = agendaCita;
-        //comentario de prueba
     }
 }
