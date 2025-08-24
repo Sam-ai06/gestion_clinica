@@ -111,20 +111,7 @@ public class DoctorController implements Initializable {
 
     @FXML
     public void handleRecetas() {
-        // Cambia la vista a la tabla de recetas enviadas SOLO por este doctor
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Recetas-view.fxml"));
-            Parent root = loader.load();
-            RecetasController recetasController = loader.getController();
-            recetasController.setCedulaDoctor(cedulaDoctor); // <-- Pasa la cédula del doctor
-            Stage stage = (Stage) btnPrescriptions.getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.show();
-            stage.centerOnScreen();
-        } catch (IOException e) {
-            lbl_msg.setText("Error al mostrar recetas.");
-            e.printStackTrace();
-        }
+
     }
 
     @FXML
