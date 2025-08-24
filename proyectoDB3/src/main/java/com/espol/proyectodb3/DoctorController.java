@@ -2,6 +2,7 @@ package com.espol.proyectodb3;
 
 import SQL.DatabaseConnection;
 import entidades.Cita;
+import entidades.Cliente;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
