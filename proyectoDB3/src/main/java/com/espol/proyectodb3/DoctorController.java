@@ -123,6 +123,3 @@ public class DoctorController implements Initializable {
         }
     }
 
-
-
-}
