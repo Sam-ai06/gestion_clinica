@@ -22,7 +22,7 @@ public class NuevaCitaController {
     @FXML
     private TextArea taDescription;
 
-    // Método para inicializar los ComboBox con datos.
+
     @FXML
     public void initialize() {
         // Ejemplo de llenado de ComboBox de especialidades.
@@ -30,7 +30,7 @@ public class NuevaCitaController {
         cbSpecialty.getItems().addAll("Cardiología", "Dermatología", "Pediatría");
     }
 
-    // Nuevo método para manejar el guardado de la cita.
+
     @FXML
     public void handleSave(ActionEvent event) {
         LocalDate fecha = datePicker.getValue();
@@ -39,12 +39,12 @@ public class NuevaCitaController {
         String descripcion = taDescription.getText();
 
         // Aquí debes obtener el ID del cliente logeado para la cita.
-        // Por ahora, usaremos un valor de ejemplo.
+        //valor de ejemplo
         String cedulaCliente = "ejemploCedulaCliente";
 
         // Aquí debes obtener el ID del doctor seleccionado.
-        // Esto podría ser un mapa o una consulta a la base de datos.
-        // Por ahora, usaremos un valor de ejemplo.
+        //valor de ejemplo
+
         String cedulaDoctor = "ejemploCedulaDoctor";
 
         if (fecha == null || especialidad == null || doctor == null || descripcion.isEmpty()) {
@@ -58,16 +58,15 @@ public class NuevaCitaController {
              PreparedStatement pstmt = con.prepareStatement(sql)) {
 
             pstmt.setString(1, fecha.toString());
-            pstmt.setString(2, "08:00:00"); // Hora de ejemplo
+            pstmt.setString(2, "08:00:00");
             pstmt.setString(3, cedulaCliente);
             pstmt.setString(4, cedulaDoctor);
             pstmt.setString(5, descripcion);
-            pstmt.setString(6, "Pendiente"); // Estado inicial de la cita
+            pstmt.setString(6, "Pendiente");
 
             pstmt.executeUpdate();
             showAlert(Alert.AlertType.INFORMATION, "Éxito", "Cita guardada con éxito.");
 
-            // Cerrar la ventana después de guardar la cita.
             handleCancel(event);
 
         } catch (SQLException e) {
