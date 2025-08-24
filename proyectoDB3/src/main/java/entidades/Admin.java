@@ -53,7 +53,8 @@ public class Admin extends Persona{
     }
 
     //metodos para un administrador:
-}
+
+}         
 
 
 
