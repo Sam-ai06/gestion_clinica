@@ -4,11 +4,15 @@ import entidades.Cita;
 import entidades.Tratamiento;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.geometry.Insets;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.Optional;
@@ -94,7 +98,29 @@ public class DoctorController implements Initializable {
 
     @FXML
     private void handleLogout() {
-        // Lógica para cerrar sesión
+        try {
+            // Cargar la vista de login
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Main-view.fxml"));
+            Parent root = loader.load();
+
+            Stage stage = (Stage) btnLogout.getScene().getWindow();
+
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Clinic data | panel de personal");
+            stage.centerOnScreen();
+            stage.show();
+
+            this.cedulaDoctor = null;
+
+        } catch (Exception e) {
+            System.err.println("Error cerrando sesión: " + e.getMessage());
+            e.printStackTrace();
+
+            if (lbl_msg != null) {
+                lbl_msg.setText("Error al cerrar sesión");
+            }
+        }
     }
 
     public void cargarCitasDelDoctor() {
