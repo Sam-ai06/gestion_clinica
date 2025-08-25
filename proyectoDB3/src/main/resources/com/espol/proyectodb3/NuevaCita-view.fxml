@@ -65,12 +65,12 @@
 
                 <VBox alignment="CENTER" spacing="15.0">
                     <children>
-                        <Button fx:id="btnAgendar" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-background-radius: 8; -fx-font-weight: bold;" text="Agendar Cita">
+                        <Button fx:id="btnAgendar" mnemonicParsing="false" prefHeight="40.0" prefWidth="150.0" style="-fx-background-color: #0b1447; -fx-text-fill: white; -fx-background-radius: 15; -fx-font-weight: bold;" text="Agendar Cita">
                             <font>
                                 <Font size="14.0" />
                             </font>
                         </Button>
-                        <Button fx:id="btnCancelar" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 8;" text="Cancelar">
+                        <Button fx:id="btnCancelar" mnemonicParsing="false" prefHeight="35.0" prefWidth="120.0" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-background-radius: 15;" text="Cancelar">
                             <font>
                                 <Font size="12.0" />
                             </font>
